@@ -5,9 +5,9 @@ def chatbot():
     while True:
         user_input = input("You: ")
         
-        
         response = process_input(user_input)
         print(f"Chatbot: {response}")
+        
         if user_input.lower() == "bye":
             break
 
