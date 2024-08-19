@@ -1,6 +1,7 @@
 import random
 import logging
 from dataset import categories, responses
+from stopwords import expand_contractions, CUSTOM_STOPWORDS, CATEGORY_SYNONYMS
 from tokenize import tokenize
 
 class ChatbotContext:
@@ -15,18 +16,13 @@ class ChatbotContext:
 
 context = ChatbotContext()
 
-def pattern_matching(user_input):
+def pattern_and_synonym_matching(user_input):
     user_input = user_input.lower()
 
-    patterns = {
-        'greeting': ['hello', 'hi', 'hey', 'greetings'],
-        'goodbye': ['bye', 'goodbye', 'see you', 'farewell'],
-    }
-
-    for category, keywords in patterns.items():
+    for category, keywords in CATEGORY_SYNONYMS.items():
         for keyword in keywords:
             if keyword in user_input:
-                logging.info(f"Pattern matched: '{keyword}' in category '{category}'")
+                logging.info(f"Matched: '{keyword}' in category '{category}'")
                 for number, cat in categories.items():
                     if cat == category:
                         return number
@@ -38,7 +34,7 @@ def process_input_with_pattern(user_input):
         return "Please enter a valid message."
 
     try:
-        detected_category = pattern_matching(user_input)
+        detected_category = pattern_and_synonym_matching(user_input)
         
         if detected_category is None:
             tokens = tokenize(user_input)

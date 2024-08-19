@@ -1,8 +1,7 @@
 import re
-from stopwords import expand_contractions, CUSTOM_STOPWORDS, CATEGORY_SYNONYMS
+from stopwords import expand_contractions, CUSTOM_STOPWORDS, categorize_tokens
 
 def porter_stemmer(word):
-
     if word.endswith('ed') or word.endswith('ing'):
         word = re.sub(r'(ed|ing)$', '', word)
 
@@ -27,31 +26,23 @@ def porter_stemmer(word):
         word = re.sub(r'ive$', '', word)
     return word
 
-def map_to_category(tokens):
-    tokens = ' '.join(tokens)
-    
-    for category, synonyms in CATEGORY_SYNONYMS.items():
-        for synonym in synonyms:
-            if synonym in tokens:
-                return [category]
-    return tokens
+    for category, keywords in category_keywords.items():
+        for token in tokens:
+            if token in keywords:
+                return category
+
+    return 'unknown'
 
 def tokenize(text, remove_stopwords=True):
     text = expand_contractions(text.lower())
     text = re.sub(r'[^\w\s]', '', text)
     tokens = re.findall(r'\b\w+\b', text)
     
-    # if remove_stopwords:
-    #     tokens = [word for word in tokens if word not in CUSTOM_STOPWORDS]
+    if remove_stopwords:
+        tokens = [word for word in tokens if word not in CUSTOM_STOPWORDS]
     
-    # Apply custom stemming
     tokens = [porter_stemmer(token) for token in tokens]
 
-    tokens = map_to_category(tokens)
+    category = categorize_tokens(tokens)
     
-    return tokens
-
-
-# text = "I'm testing the tokenizer and It's working well!"
-# tokens = tokenize(text)
-# print(tokens)
+    return category
