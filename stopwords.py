@@ -13,14 +13,6 @@ CUSTOM_STOPWORDS = {
     'now'
 }
 
-CATEGORY_SYNONYMS = {
-    'greeting': ['hello', 'hi', 'greetings', 'hey', 'good morning', 'good evening'],
-    'status': ['how are you', 'how do you do', 'what’s up', 'what is your status'],
-    'goodbye': ['bye', 'goodbye', 'see you', 'farewell', 'ciao'],
-    'introduction': ['who are you', 'introduce yourself', 'tell me about yourself'],
-    'capability': ['what can you do', 'what are your capabilities', 'what are you capable of']
-}
-
 def expand_contractions(text):
     CONTRACTIONS = {
         "don't": "do not",
